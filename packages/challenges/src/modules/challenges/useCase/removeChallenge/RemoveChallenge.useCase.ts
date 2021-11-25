@@ -5,11 +5,13 @@ import { ChallengeRepository } from '../../repositories/prisma/Challenge.reposit
 export class RemoveChallengeUseCase {
   constructor(private readonly challengeRepository: ChallengeRepository) {}
 
-  async execute(challengeId: string): Promise<void> {
+  async execute(challengeId: string): Promise<boolean> {
     const wasRemoved = await this.challengeRepository.removeById(challengeId);
 
     if (!wasRemoved) {
       throw new Error('Challenge not found');
     }
+
+    return wasRemoved;
   }
 }

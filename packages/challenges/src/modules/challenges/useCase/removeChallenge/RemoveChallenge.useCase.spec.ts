@@ -41,7 +41,7 @@ describe('Remove Challenge Use Case', () => {
 
     const challenge = await challengeRepository.findById(challengeCreated.id);
 
-    expect(response).toBeUndefined();
+    expect(response).toBe(true);
     expect(challenge).toBeUndefined();
   });
 
