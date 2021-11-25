@@ -7,6 +7,7 @@ import { RemoveChallengeUseCase } from './useCase/removeChallenge/RemoveChalleng
 @Module({
   providers: [
     CreateChallengeUseCaseResolver,
+    RemoveChallengeResolver,
     ChallengeRepository,
     CreateChallengeUseCase,
     RemoveChallengeUseCase,
