@@ -44,4 +44,10 @@ describe('Remove Challenge Use Case', () => {
     expect(response).toBeUndefined();
     expect(challenge).toBeUndefined();
   });
+
+  it("should be returning an error if the challenge doesn't exist", async () => {
+    const response = removeChallengeUseCase.execute('non-existent-id');
+
+    await expect(response).rejects.toThrowError('Challenge not found');
+  });
 });
