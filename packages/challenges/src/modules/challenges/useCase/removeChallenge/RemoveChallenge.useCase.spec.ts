@@ -30,15 +30,18 @@ describe('Remove Challenge Use Case', () => {
   });
 
   it('should be removing one challenge by id', async () => {
-    const challenge = {
+    const challengeData = {
       title: 'Remove Challenge',
       description: 'should be removing one challenge by id',
     };
 
-    const challengeCreated = await challengeRepository.create(challenge);
+    const challengeCreated = await challengeRepository.create(challengeData);
 
     const response = await removeChallengeUseCase.execute(challengeCreated.id);
 
+    const challenge = await challengeRepository.findById(challengeCreated.id);
+
     expect(response).toBeUndefined();
+    expect(challenge).toBeUndefined();
   });
 });
