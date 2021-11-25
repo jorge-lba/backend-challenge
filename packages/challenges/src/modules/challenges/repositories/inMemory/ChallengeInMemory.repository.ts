@@ -18,4 +18,8 @@ export class ChallengeInMemoryRepository implements IChallengeRepository {
 
     return challenge;
   }
+
+  async findById(challengeId: string) {
+    return this._challenges.find((challenge) => challenge.id === challengeId);
+  }
 }
