@@ -6,6 +6,10 @@ export class RemoveChallengeUseCase {
   constructor(private readonly challengeRepository: ChallengeRepository) {}
 
   async execute(challengeId: string): Promise<void> {
-    await this.challengeRepository.removeById(challengeId);
+    const wasRemoved = await this.challengeRepository.removeById(challengeId);
+
+    if (!wasRemoved) {
+      throw new Error('Challenge not found');
+    }
   }
 }
