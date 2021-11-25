@@ -24,8 +24,16 @@ export class ChallengeInMemoryRepository implements IChallengeRepository {
   }
 
   async removeById(challengeId: string) {
-    this._challenges = this._challenges.filter(
-      (challenge) => challenge.id !== challengeId,
+    const challengeIndex = this._challenges.findIndex(
+      (challenge) => challenge.id === challengeId,
     );
+
+    if (challengeIndex === -1) {
+      return false;
+    }
+
+    this._challenges.splice(challengeIndex, 1);
+
+    return true;
   }
 }
