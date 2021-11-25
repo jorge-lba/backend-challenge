@@ -23,7 +23,7 @@ export class ChallengeInMemoryRepository implements IChallengeRepository {
     return this._challenges.find((challenge) => challenge.id === challengeId);
   }
 
-  async remove(challengeId: string) {
+  async removeById(challengeId: string) {
     this._challenges = this._challenges.filter(
       (challenge) => challenge.id !== challengeId,
     );
