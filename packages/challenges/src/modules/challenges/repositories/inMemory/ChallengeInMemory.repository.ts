@@ -22,4 +22,10 @@ export class ChallengeInMemoryRepository implements IChallengeRepository {
   async findById(challengeId: string) {
     return this._challenges.find((challenge) => challenge.id === challengeId);
   }
+
+  async remove(challengeId: string) {
+    this._challenges = this._challenges.filter(
+      (challenge) => challenge.id !== challengeId,
+    );
+  }
 }
