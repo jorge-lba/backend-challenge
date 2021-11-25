@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ChallengeInMemoryRepository } from '../../repositories/inMemory/ChallengeInMemory.repository';
 import { ChallengeRepository } from '../../repositories/prisma/Challenge.repository';
+import { RemoveChallengeUseCase } from './RemoveChallenge.useCase';
 
 describe('Remove Challenge Use Case', () => {
   let removeChallengeUseCase: RemoveChallengeUseCase;
@@ -23,5 +24,5 @@ describe('Remove Challenge Use Case', () => {
 
   it('should be defined', () => {
     expect(removeChallengeUseCase).toBeDefined();
-  }
+  });
 });
