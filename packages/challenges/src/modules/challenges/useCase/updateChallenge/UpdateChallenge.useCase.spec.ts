@@ -51,4 +51,13 @@ describe('Update Challenge Use Case', () => {
       }),
     );
   });
+
+  it("should be returning an error if the challenge doesn't exist", async () => {
+    const response = updateUseCase.execute('non-existent-id', {
+      title: 'Test Update Challenge',
+      description: 'should update a challenge',
+    });
+
+    await expect(response).rejects.toThrowError('Challenge not found');
+  });
 });
