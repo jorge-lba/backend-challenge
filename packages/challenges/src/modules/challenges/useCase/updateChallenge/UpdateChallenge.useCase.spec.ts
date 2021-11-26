@@ -84,4 +84,28 @@ describe('Update Challenge Use Case', () => {
       }),
     );
   });
+
+  it("should be possible to update a challenge's descriptions", async () => {
+    const challengeCreated = await challengeRepository.create({
+      title: 'Test Update Challenge',
+      description: 'should update a challenge',
+    });
+
+    const challengeData = {
+      description: 'should update a challenge updated',
+    };
+
+    const challengeUpdated = await updateUseCase.execute(
+      challengeCreated.id,
+      challengeData,
+    );
+
+    expect(challengeUpdated.createdAt).toBeDefined();
+    expect(challengeUpdated).toEqual(
+      expect.objectContaining({
+        ...challengeData,
+        id: expect.any(String),
+      }),
+    );
+  });
 });
