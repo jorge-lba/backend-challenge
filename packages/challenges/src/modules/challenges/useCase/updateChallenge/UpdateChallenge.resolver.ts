@@ -10,7 +10,7 @@ export class UpdateChallengeResolver {
   ) {}
 
   @Mutation(() => Challenge)
-  UpdateChallenge(
+  updateChallenge(
     @Args('challengeId') challengeId: string,
     @Args('updateChallengeInput') updateChallengeInput: UpdateChallengeInput,
   ) {
