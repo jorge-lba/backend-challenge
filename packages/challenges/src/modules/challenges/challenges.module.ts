@@ -5,12 +5,14 @@ import { CreateChallengeUseCaseResolver } from './useCase/createChallenge/Create
 import { RemoveChallengeUseCase } from './useCase/removeChallenge/RemoveChallenge.useCase';
 import { RemoveChallengeResolver } from './useCase/removeChallenge/RemoveChallenge.resolver';
 import { UpdateChallengeUseCase } from './useCase/updateChallenge/UpdateChallenge.useCase';
+import { UpdateChallengeResolver } from './useCase/updateChallenge/UpdateChallenge.resolver';
 
 @Module({
   providers: [
     ChallengeRepository,
     CreateChallengeUseCaseResolver,
     RemoveChallengeResolver,
+    UpdateChallengeResolver,
     CreateChallengeUseCase,
     RemoveChallengeUseCase,
     UpdateChallengeUseCase,
