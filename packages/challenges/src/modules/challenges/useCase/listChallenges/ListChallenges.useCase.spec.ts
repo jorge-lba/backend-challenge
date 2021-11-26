@@ -75,8 +75,10 @@ describe('List Challenge Use Case', () => {
     const expectedTotalPages = Math.ceil(CREATED_QUANTITY / expectedQuantity);
 
     const { challenges, pagination } = await listUseCase.execute({
-      page: expectedPage,
-      pageSize: expectedQuantity,
+      pagination: {
+        page: expectedPage,
+        pageSize: expectedQuantity,
+      },
     });
 
     expect(challenges.length).toBe(expectedQuantity);
@@ -87,5 +89,38 @@ describe('List Challenge Use Case', () => {
     expect(pagination.page).toBe(expectedPage);
     expect(pagination.pageSize).toBe(expectedQuantity);
     expect(pagination.containsNextPage).toBe(expectedContainsNextPage);
+  });
+
+  it('should be list challenges searching by text - title', async () => {
+    const CREATED_QUANTITY = 20;
+
+    const challengeData = {
+      title: 'Remove Challenge',
+      description: 'should be removing one challenge by id',
+    };
+
+    const bulkCreated = Array.from(Array(CREATED_QUANTITY).keys()).map(
+      (value) =>
+        challengeRepository.create({
+          title: `${challengeData.title} ${value}`,
+          description: `${challengeData.description} ${value * 2}`,
+        }),
+    );
+
+    await Promise.all(bulkCreated);
+
+    const { challenges } = await listUseCase.execute({
+      search: 'Challenge 4',
+    });
+
+    const expectedChallengeData = {
+      title: 'Remove Challenge 4',
+      description: 'should be removing one challenge by id 8',
+    };
+
+    expect(challenges.length).toBe(1);
+    expect(challenges).toEqual(
+      expect.arrayContaining([expect.objectContaining(expectedChallengeData)]),
+    );
   });
 });
