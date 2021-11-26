@@ -60,4 +60,28 @@ describe('Update Challenge Use Case', () => {
 
     await expect(response).rejects.toThrowError('Challenge not found');
   });
+
+  it('should be possible to update the title of a challenge', async () => {
+    const challengeCreated = await challengeRepository.create({
+      title: 'Test Update Challenge',
+      description: 'should update a challenge',
+    });
+
+    const challengeData = {
+      title: 'Test Update Challenge Updated',
+    };
+
+    const challengeUpdated = await updateUseCase.execute(
+      challengeCreated.id,
+      challengeData,
+    );
+
+    expect(challengeUpdated.createdAt).toBeDefined();
+    expect(challengeUpdated).toEqual(
+      expect.objectContaining({
+        ...challengeData,
+        id: expect.any(String),
+      }),
+    );
+  });
 });
