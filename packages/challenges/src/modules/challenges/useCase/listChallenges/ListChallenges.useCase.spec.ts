@@ -123,4 +123,37 @@ describe('List Challenge Use Case', () => {
       expect.arrayContaining([expect.objectContaining(expectedChallengeData)]),
     );
   });
+
+  it('should be list challenges searching by text - description', async () => {
+    const CREATED_QUANTITY = 20;
+
+    const challengeData = {
+      title: 'Remove Challenge',
+      description: 'should be removing one challenge by id',
+    };
+
+    const bulkCreated = Array.from(Array(CREATED_QUANTITY).keys()).map(
+      (value) =>
+        challengeRepository.create({
+          title: `${challengeData.title} ${value}`,
+          description: `${challengeData.description} ${value * 2}`,
+        }),
+    );
+
+    await Promise.all(bulkCreated);
+
+    const { challenges } = await listUseCase.execute({
+      search: 'by id 8',
+    });
+
+    const expectedChallengeData = {
+      title: 'Remove Challenge 4',
+      description: 'should be removing one challenge by id 8',
+    };
+
+    expect(challenges.length).toBe(1);
+    expect(challenges).toEqual(
+      expect.arrayContaining([expect.objectContaining(expectedChallengeData)]),
+    );
+  });
 });
