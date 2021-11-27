@@ -1,4 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { UseCaseError } from '../../../errors/UseCase.error';
 import { ChallengeInMemoryRepository } from '../../challenges/repositories/inMemory/ChallengeInMemory.repository';
 import { ChallengeRepository } from '../../challenges/repositories/prisma/Challenge.repository';
 import { IAnswer } from '../interfaces/IAnswer.interface';
@@ -55,5 +56,32 @@ describe('Send Answer Use Case', () => {
     };
 
     expect(response).toEqual(expect.objectContaining(expectedResponse));
+  });
+
+  it('should be record the response with error status if the challenge does not exist', async () => {
+    const answer = {
+      challengeId: 'non-existent-challenge-id',
+      link: 'https://github.com/jorge-lba/ignite-tests-challenge',
+    } as IAnswer;
+
+    const response = await sendAnswerUseCase.execute(answer);
+
+    const expectedAnswer = {
+      id: expect.any(String),
+      challengeId: null,
+      link: answer.link,
+      status: 'Error',
+      grade: null,
+    };
+
+    const expectedErrorMessage = 'challengeId is invalid';
+
+    expect(response).toBeInstanceOf(UseCaseError);
+    expect(response.errors).toEqual(
+      expect.arrayContaining([expectedErrorMessage]),
+    );
+    expect(response.body.answer).toEqual(
+      expect.objectContaining(expectedAnswer),
+    );
   });
 });
