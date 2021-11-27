@@ -84,4 +84,30 @@ describe('Send Answer Use Case', () => {
       expect.objectContaining(expectedAnswer),
     );
   });
+
+  it('should be record the response with error status if the challenge id is undefined', async () => {
+    const answer = {
+      link: 'https://github.com/jorge-lba/ignite-tests-challenge',
+    } as IAnswer;
+
+    const response = await sendAnswerUseCase.execute(answer);
+
+    const expectedAnswer = {
+      id: expect.any(String),
+      challengeId: null,
+      link: answer.link,
+      status: 'Error',
+      grade: null,
+    };
+
+    const expectedErrorMessage = 'challengeId is required';
+
+    expect(response).toBeInstanceOf(UseCaseError);
+    expect(response.errors).toEqual(
+      expect.arrayContaining([expectedErrorMessage]),
+    );
+    expect(response.body.answer).toEqual(
+      expect.objectContaining(expectedAnswer),
+    );
+  });
 });
