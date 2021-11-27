@@ -1,4 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { GitHubProvider } from '../../../providers/GitHub.provider';
+import { HttpModule } from '@nestjs/axios';
 import { UseCaseError } from '../../../errors/UseCase.error';
 import { ChallengeInMemoryRepository } from '../../challenges/repositories/inMemory/ChallengeInMemory.repository';
 import { ChallengeRepository } from '../../challenges/repositories/prisma/Challenge.repository';
@@ -6,6 +8,8 @@ import { IAnswer } from '../interfaces/IAnswer.interface';
 import { AnswerInMemoryRepository } from '../repositories/inMemory/AnswerInMemory.repository';
 import { AnswerRepository } from '../repositories/prisma/Answer.repository';
 import { SendAnswerUseCase } from './SendAnswer.useCase';
+import { ConfigModule } from '@nestjs/config';
+import { GitHubProviderMock } from '../../../providers/__mocks__/GitHubMock.providers';
 
 describe('Send Answer Use Case', () => {
   let sendAnswerUseCase: SendAnswerUseCase;
@@ -13,6 +17,12 @@ describe('Send Answer Use Case', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [
+        HttpModule,
+        ConfigModule.forRoot({
+          envFilePath: '.env.test',
+        }),
+      ],
       providers: [
         SendAnswerUseCase,
         {
@@ -22,6 +32,10 @@ describe('Send Answer Use Case', () => {
         {
           provide: AnswerRepository,
           useClass: AnswerInMemoryRepository,
+        },
+        {
+          provide: GitHubProvider,
+          useClass: GitHubProviderMock,
         },
       ],
     }).compile();
@@ -101,6 +115,32 @@ describe('Send Answer Use Case', () => {
     };
 
     const expectedErrorMessage = 'challengeId is required';
+
+    expect(response).toBeInstanceOf(UseCaseError);
+    expect(response.errors).toEqual(
+      expect.arrayContaining([expectedErrorMessage]),
+    );
+    expect(response.body.answer).toEqual(
+      expect.objectContaining(expectedAnswer),
+    );
+  });
+
+  it('should be record the response with error status if the link is not from github', async () => {
+    const answer = {
+      link: 'https://fakehub.com/jorge-lba/ignite-tests-challenge',
+    } as IAnswer;
+
+    const response = await sendAnswerUseCase.execute(answer);
+
+    const expectedAnswer = {
+      id: expect.any(String),
+      challengeId: null,
+      link: answer.link,
+      status: 'Error',
+      grade: null,
+    };
+
+    const expectedErrorMessage = 'link is invalid';
 
     expect(response).toBeInstanceOf(UseCaseError);
     expect(response.errors).toEqual(
