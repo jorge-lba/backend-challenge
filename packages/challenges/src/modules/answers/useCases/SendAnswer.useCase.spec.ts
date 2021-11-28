@@ -78,7 +78,7 @@ describe('Send Answer Use Case', () => {
       link: 'https://github.com/jorge-lba/ignite-tests-challenge',
     } as IAnswer;
 
-    const response = await sendAnswerUseCase.execute(answer);
+    const response = sendAnswerUseCase.execute(answer);
 
     const expectedAnswer = {
       id: expect.any(String),
@@ -88,15 +88,12 @@ describe('Send Answer Use Case', () => {
       grade: null,
     };
 
-    const expectedErrorMessage = 'challengeId is invalid';
+    const expectedError = new UseCaseError(
+      ['challengeId is invalid'],
+      expectedAnswer,
+    );
 
-    expect(response).toBeInstanceOf(UseCaseError);
-    expect(response.errors).toEqual(
-      expect.arrayContaining([expectedErrorMessage]),
-    );
-    expect(response.body.answer).toEqual(
-      expect.objectContaining(expectedAnswer),
-    );
+    await expect(response).rejects.toThrowError(expectedError);
   });
 
   it('should be record the response with error status if the challenge id is undefined', async () => {
@@ -104,7 +101,7 @@ describe('Send Answer Use Case', () => {
       link: 'https://github.com/jorge-lba/ignite-tests-challenge',
     } as IAnswer;
 
-    const response = await sendAnswerUseCase.execute(answer);
+    const response = sendAnswerUseCase.execute(answer);
 
     const expectedAnswer = {
       id: expect.any(String),
@@ -114,15 +111,12 @@ describe('Send Answer Use Case', () => {
       grade: null,
     };
 
-    const expectedErrorMessage = 'challengeId is required';
+    const expectedError = new UseCaseError(
+      ['challengeId is required'],
+      expectedAnswer,
+    );
 
-    expect(response).toBeInstanceOf(UseCaseError);
-    expect(response.errors).toEqual(
-      expect.arrayContaining([expectedErrorMessage]),
-    );
-    expect(response.body.answer).toEqual(
-      expect.objectContaining(expectedAnswer),
-    );
+    await expect(response).rejects.toThrowError(expectedError);
   });
 
   it('should be record the response with error status if the link is not from github', async () => {
@@ -130,7 +124,7 @@ describe('Send Answer Use Case', () => {
       link: 'https://fakehub.com/jorge-lba/ignite-tests-challenge',
     } as IAnswer;
 
-    const response = await sendAnswerUseCase.execute(answer);
+    const response = sendAnswerUseCase.execute(answer);
 
     const expectedAnswer = {
       id: expect.any(String),
@@ -140,14 +134,31 @@ describe('Send Answer Use Case', () => {
       grade: null,
     };
 
-    const expectedErrorMessage = 'link is invalid';
+    const expectedError = new UseCaseError(['link is invalid'], expectedAnswer);
 
-    expect(response).toBeInstanceOf(UseCaseError);
-    expect(response.errors).toEqual(
-      expect.arrayContaining([expectedErrorMessage]),
+    await expect(response).rejects.toThrowError(expectedError);
+  });
+
+  it('should be record the response with error status if the link is invalid repo', async () => {
+    const answer = {
+      link: 'https://github.com/jorge-lba/invalid-repo',
+    } as IAnswer;
+
+    const response = sendAnswerUseCase.execute(answer);
+
+    const expectedAnswer = {
+      id: expect.any(String),
+      challengeId: null,
+      link: answer.link,
+      status: 'Error',
+      grade: null,
+    };
+
+    const expectedError = new UseCaseError(
+      ['link is not a repository'],
+      expectedAnswer,
     );
-    expect(response.body.answer).toEqual(
-      expect.objectContaining(expectedAnswer),
-    );
+
+    await expect(response).rejects.toThrowError(expectedError);
   });
 });
