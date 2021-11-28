@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { GitHubProvider } from '../../../providers/GitHub.provider';
+import { GitHubProvider } from '../../../../providers/GitHub.provider';
 import { HttpModule } from '@nestjs/axios';
-import { UseCaseError } from '../../../errors/UseCase.error';
-import { ChallengeInMemoryRepository } from '../../challenges/repositories/inMemory/ChallengeInMemory.repository';
-import { ChallengeRepository } from '../../challenges/repositories/prisma/Challenge.repository';
-import { IAnswer } from '../interfaces/IAnswer.interface';
-import { AnswerInMemoryRepository } from '../repositories/inMemory/AnswerInMemory.repository';
-import { AnswerRepository } from '../repositories/prisma/Answer.repository';
+import { UseCaseError } from '../../../../errors/UseCase.error';
+import { ChallengeInMemoryRepository } from '../../../challenges/repositories/inMemory/ChallengeInMemory.repository';
+import { ChallengeRepository } from '../../../challenges/repositories/prisma/Challenge.repository';
+import { IAnswer } from '../../interfaces/IAnswer.interface';
+import { AnswerInMemoryRepository } from '../../repositories/inMemory/AnswerInMemory.repository';
+import { AnswerRepository } from '../../repositories/prisma/Answer.repository';
 import { SendAnswerUseCase } from './SendAnswer.useCase';
 import { ConfigModule } from '@nestjs/config';
-import { GitHubProviderMock } from '../../../providers/__mocks__/GitHubMock.providers';
+import { GitHubProviderMock } from '../../../../providers/__mocks__/GitHubMock.providers';
 
 describe('Send Answer Use Case', () => {
   let sendAnswerUseCase: SendAnswerUseCase;
