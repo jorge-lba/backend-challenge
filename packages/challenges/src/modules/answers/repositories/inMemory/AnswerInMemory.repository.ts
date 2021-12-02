@@ -1,6 +1,8 @@
+import { Injectable } from '@nestjs/common';
 import { IAnswer } from '../../interfaces/IAnswer.interface';
 import { IAnswerRepository, ICreateAnswerInput } from '../IAnswer.repository';
 
+@Injectable()
 export class AnswerInMemoryRepository implements IAnswerRepository {
   private _answers: IAnswer[] = [];
 
@@ -29,8 +31,6 @@ export class AnswerInMemoryRepository implements IAnswerRepository {
       ...this._answers[answerIndex],
       ...answer,
     };
-
-    console.log(this._answers);
 
     return this._answers[answerIndex];
   }
