@@ -34,4 +34,12 @@ export class AnswerInMemoryRepository implements IAnswerRepository {
 
     return this._answers[answerIndex];
   }
+
+  async findById(answerId: string): Promise<IAnswer> {
+    const answer = this._answers.find(
+      (answerItem) => answerItem.id === answerId,
+    );
+
+    return answer;
+  }
 }
