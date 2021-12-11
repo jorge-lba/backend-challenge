@@ -67,6 +67,7 @@ describe('List Answers Use Case', () => {
     ]);
 
     const { answers } = await listAnswersUseCase.execute({
+      
       filter: {
         challengeId: '1',
       },
@@ -92,6 +93,7 @@ describe('List Answers Use Case', () => {
     ]);
 
     const { answers } = await listAnswersUseCase.execute({
+
       filter: {
         status: Status.Error,
       },
@@ -115,6 +117,7 @@ describe('List Answers Use Case', () => {
     );
 
     const { answers } = await listAnswersUseCase.execute({
+
       filter: {
         dateBetween: {
           start: '2020-01-01',

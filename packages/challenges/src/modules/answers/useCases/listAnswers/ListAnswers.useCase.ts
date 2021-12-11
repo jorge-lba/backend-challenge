@@ -11,6 +11,7 @@ interface IListAnswersInput {
   pagination?: Partial<IPagination>;
   filter?: IFilter;
 }
+
 @Injectable()
 export class ListAnswersUseCase {
   constructor(private readonly answerRepository: AnswerRepository) {}
